@@ -1,5 +1,6 @@
 ﻿using Microsoft.Win32;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -10,19 +11,15 @@ using System.Threading.Tasks;
 
 namespace Bank_app
 {
-	internal class Program 
+	internal class Program
 	{
 		//fields
-		public static List<Customer> customers;
-		public  static Customer loggedInCustomer;
+		public readonly string passwordPattern = @"^(?=.*[a-zA-Z0-9])(?=.*[@#$%^&+=])(?=.{6,})";
+		public readonly string emailPattern = @"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$";
+		public readonly string namePattern = @"^[A-Z][a-zA-Z]*\s[A-Z][a-zA-Z]*$";
 		public static string choice;
 
-		//constructor
-		public Program()
-			{
-				customers = new List<Customer>();
-				loggedInCustomer = null;
-			}
+
 
 		//Entry point
 		static void Main(string[] args)
@@ -48,7 +45,7 @@ namespace Bank_app
 				{
 					var customa = new RegisterCustomer();
 					customa.Registration();
-					customa.ShowMyRegistration();
+					
 				}
 				if (choice == "2")
 				{

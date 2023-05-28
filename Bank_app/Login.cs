@@ -1,16 +1,20 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Bank_app
 {
-	internal class Login: RegisterCustomer
+	internal class Login:RegisterCustomer
 	{
 		public string myemail { get; set; }
 		public string mypassword { get; set; }
+
+		public ArrayList credentials = new ArrayList() { cusFullname, cusAccountType, cusAccountNo, cusEmail, cusPassword };
 
 		public Login()
 		{
@@ -22,37 +26,58 @@ namespace Bank_app
 
 		public void ApproveLogin() // login with email and password
 		{
-			do {
-				Console.Clear();
-				Console.WriteLine("Login with the correct email here.");
-				myemail = Console.ReadLine();
-			} while (!Regex.IsMatch(myemail, emailPattern));
 			do
 			{
-				Console.Clear();
-				Console.WriteLine("Enter your Login password");
+				Console.WriteLine("------SHAZAM BANK LOGIN PORTAL-------");
+				Console.WriteLine("Enter your email.");
+				myemail = Console.ReadLine();
+			} while (!Regex.IsMatch(myemail, emailPattern));
+
+
+			do
+			{
+				Console.WriteLine("Enter your password");
 				mypassword = Console.ReadLine();
 			} while (!Regex.IsMatch(mypassword, passwordPattern));
 
-			Customer customer = Program.customers.Find(c => c.email == myemail && c.password == mypassword);
-			if (customer is null)
-			{
-				Console.Clear();
-				Console.WriteLine("Invalid username or password. Please try again.");
-				Console.WriteLine("Press A");
-
-			}
-			else
-			{
-				loggedInCustomer = customer;
-				Console.WriteLine("Login successful.");
-
-			}
-
+			VerifyCredentials();
 
 		}
 
 
 
+
+
+		public void VerifyCredentials()
+		{
+			string press;
+			
+			if (cusEmail == myemail && cusPassword == mypassword)
+			{
+				Console.Clear();
+				Console.WriteLine("Successfully Logged in !.");
+				
+				var myDashboard = new DashBoard();
+				myDashboard.ShowMenu();
+			}
+			else
+			{
+				do
+				{
+					Console.WriteLine("Invalid username or password.");
+					Console.WriteLine("Do you want to try again ?   Y /N");
+					press = Console.ReadLine();
+					if (press == "Y" || press == "y")
+					{
+						ApproveLogin();
+					}
+					else if (press == "n" || press == "N")
+					{
+						Controller();
+					}
+					else { Console.WriteLine("Please give it Another Try Champ!"); }
+				} while (int.TryParse(press, out _) || press != "Y" || press != "y");
+			}
+		}
 	}
 }

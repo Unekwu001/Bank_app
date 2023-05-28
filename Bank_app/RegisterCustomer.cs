@@ -2,6 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
+using System.Security.AccessControl;
 using System.Security.Cryptography.X509Certificates;
 using System.Security.Principal;
 using System.Text;
@@ -13,42 +15,48 @@ namespace Bank_app
 	internal class RegisterCustomer:Program
 	{
 		// Fields
-		string cusFullname;
-		string cusEmail;
-		string cusPassword;
-		string cusAccountNo;
-		string cusAccountType;
-		public readonly string passwordPattern = @"^(?=.*[a-zA-Z0-9])(?=.*[@#$%^&+=])(?=.{6,})";
-		public readonly string emailPattern = @"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$";
-		public readonly string namePattern = @"^[A-Z][a-zA-Z]*\s[A-Z][a-zA-Z]*$";
+		string pick;
+		public static string cusFullname = "";
+		public static string cusEmail = "";
+		public static string cusPassword = "";
+		public static string cusAccountNo = "";
+		public static string cusAccountType = "";
+		 	 
 
 		internal void Registration() //Registration method 
 		{
+			string press;
 			Console.Clear();
 			Console.WriteLine("Register to Shazam Bank\n");
-			Console.WriteLine("What type of account do you want open ?\n\n");
 			AccountType();
 			Fullname();
 			Email();
 			Password();
 			GenerateAccountNo();
-			AddCustomer();
-			var mylogin = new Login();
-			mylogin.ApproveLogin();
+			ShowMyRegistration();
+			 
+			
+			do
+			{
+				Console.WriteLine("Congratulations on your account Opening Champ!\nDo you want to proceed to Login ? Y or N\n");
+				press = Console.ReadLine();
+
+				if (press == "y" || press == "Y")
+				{
+					GoToLogin();
+				}
+			}while (!int.TryParse(press, out _ ));
+
 		}
 
 		//Printing of the all registered Customers
 		internal void ShowMyRegistration()
 		{
-			foreach (var customer in customers)
-			{
-				Console.WriteLine($"Name: {customer.fullname}");
-				Console.WriteLine($"Account Type: {customer.accountType}");
-				Console.WriteLine($"Account Number: {customer.accountNo}");
-				Console.WriteLine($"Email: {customer.email}");
-				Console.WriteLine($"Password: **********");
-				Console.WriteLine();
-			}
+				Console.WriteLine($"Name:    {cusFullname} ");
+				Console.WriteLine($"Account Type:   {cusAccountType}");
+				Console.WriteLine($"Account Number:   {cusAccountNo}");
+				Console.WriteLine($"Email:    {cusEmail}");
+				Console.WriteLine($"Password: Your password and other details has been sent to your email.\n\n");		
 		}
 
 		//---------------------------------------------------------------------------------------------------------------------------
@@ -60,25 +68,19 @@ namespace Bank_app
 		//-----------------------------------------------------------------------------------------------------------
 		
 
-
-		
-
 		public void AccountType()
 		{
-			
-			Console.WriteLine(">  Press 1 to open a savings account\n>  Press 2 to open a current account  ");
-			cusAccountType = Console.ReadLine();
+			Console.WriteLine(" Please Enter your desired account type\n");
+			Console.WriteLine(">  Press 1 for savings account\n>  Press 2 for current account  ");
+			string input = Console.ReadLine();
 
-			string savings = "SAVINGS";
-			string current = "CURRENT";
-
-			if (cusAccountType == "1")
+			if (input == "1")
 			{
-				cusAccountType = savings;
+				cusAccountType += "savings";
 			}
-			else if (cusAccountType == "2")
+			else if (input == "2")
 			{
-				cusAccountType = current;
+				cusAccountType += "current";
 			}
 			else
 			{
@@ -134,22 +136,12 @@ namespace Bank_app
 			cusAccountNo = i.ToString();
 		}
 
-		public void AddCustomer()
-		{
-			Customer existingCustomer = Program.customers.Find(c => c.email == cusEmail && c.password == cusPassword);
-			if (existingCustomer != null)
-			{
-				Console.WriteLine("Username already exists. Please try again.");
-				Registration();
-			}
-			else
-			{
-				var customer = new Customer(cusFullname, cusAccountType, cusAccountNo, cusEmail, cusPassword);
-				customers.Add(customer);
-				loggedInCustomer = customer;
-				Console.WriteLine("Customer registered successfully!");
-			}
+		 
+		public void GoToLogin()
+		{	 
+			var mylogin = new Login();
+			mylogin.ApproveLogin();
 		}
-		
+
 	}
 }

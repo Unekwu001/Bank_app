@@ -46,7 +46,6 @@
     <Compile Include="Accounts.cs" />
     <Compile Include="RegisterCustomer.cs" />
     <Compile Include="Login.cs" />
-    <Compile Include="Customer.cs" />
     <Compile Include="DashBoard.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
