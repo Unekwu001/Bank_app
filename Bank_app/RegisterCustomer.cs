@@ -12,9 +12,12 @@ using System.Threading.Tasks;
 
 namespace Bank_app
 {
-	internal class RegisterCustomer:Program
+	internal class RegisterCustomer
 	{
 		// Fields
+		public readonly string passwordPattern = @"^(?=.*[a-zA-Z0-9])(?=.*[@#$%^&+=])(?=.{6,})";
+		public readonly string emailPattern = @"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$";
+		public readonly string namePattern = @"^[A-Z][a-zA-Z]*\s[A-Z][a-zA-Z]*$";
 		string pick;
 		public static string cusFullname = "";
 		public static string cusEmail = "";
@@ -28,14 +31,14 @@ namespace Bank_app
 			string press;
 			Console.Clear();
 			Console.WriteLine("Register to Shazam Bank\n");
-			AccountType();
 			Fullname();
 			Email();
 			Password();
 			GenerateAccountNo();
+			AccountType();
 			ShowMyRegistration();
-			 
-			
+
+			bool isValid;
 			do
 			{
 				Console.WriteLine("Congratulations on your account Opening Champ!\nDo you want to proceed to Login ? Y or N\n");
@@ -43,9 +46,19 @@ namespace Bank_app
 
 				if (press == "y" || press == "Y")
 				{
+					isValid = true;
 					GoToLogin();
 				}
-			}while (!int.TryParse(press, out _ ));
+				else if (press == "N" || press == "n")
+				{
+					isValid = true;
+					Program.Controller();
+				}
+				else
+				{
+					isValid = false;
+				}
+			}while (isValid is false);
 
 		}
 
@@ -76,11 +89,37 @@ namespace Bank_app
 
 			if (input == "1")
 			{
-				cusAccountType += "savings";
+				cusAccountType = "savings";
+				decimal accBal = 0;
+				bool isValid ;
+
+				Console.WriteLine("You need to deposit at least 1000 naira to open such an account");
+				Console.Write("Please enter an amount greater or equal to 1000 naira: ");
+
+				string enteredAmount = Console.ReadLine();
+				do
+				{
+					
+					if (enteredAmount == "1000" || int.Parse(enteredAmount) >= 1000)
+					{
+						isValid= true;
+						decimal cleanAmount = decimal.Parse(enteredAmount);
+						accBal += cleanAmount;
+						Account account = new Account(cusFullname, cusAccountNo, cusAccountType, accBal);
+						Console.WriteLine($"You have successfully added {cleanAmount} naira to your new account >> {cusAccountNo} ");
+					}
+					else
+					{
+						isValid = false;
+						Console.WriteLine($"Invalid amount!. You need to enter an amount greater then 1000 naira. ");
+						Console.WriteLine($"Processed Restarted !");
+						AccountType();
+					}
+				} while (isValid == false);
 			}
 			else if (input == "2")
 			{
-				cusAccountType += "current";
+				cusAccountType = "current";
 			}
 			else
 			{
@@ -93,11 +132,12 @@ namespace Bank_app
 
 		public void Fullname()
 		{
-			do// reading fullname from console
+			do
 			{
 				Console.Clear();
-				Console.WriteLine("Please input your fullname to register");
-				cusFullname = Console.ReadLine().ToUpper().Trim();
+				Console.WriteLine("Enter your fullname to register \n(Both Should start with a capital Letter E.G John Kehinde)");
+				cusFullname = Console.ReadLine().Trim();
+
 			}
 			while (!Regex.IsMatch(cusFullname, namePattern));
 		}

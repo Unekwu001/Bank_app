@@ -6,17 +6,19 @@ using System.Threading.Tasks;
 
 namespace Bank_app
 {
-	internal class Account
+	class Account
 	{
+		public string Fullname { get; set; }
 		public string AccountNumber { get; set; }
-		public string AccountType { get; set; }
 		public decimal Balance { get; set; }
+		public string AccountType { get; set; }
 
-		public Account(string accountNumber, string accountType)
+		public Account(string fullname, string accountNumber, string accountType,decimal balance)
 		{
+			Fullname = fullname;
 			AccountNumber = accountNumber;
 			AccountType = accountType;
-			Balance = 0;
+			Balance = balance;
 		}
 	}
 }

@@ -11,16 +11,25 @@ namespace Bank_app
 {
 	internal class DashBoard : Login
 	{
-		ArrayList firstAccountCreated = new ArrayList() { cusFullname, cusAccountType, cusAccountNo, 0 };
- 
+		static List<Account> accounts = new List<Account>();
+
+		public string accNo = "";
+		public decimal accBal = 0;
+		public string accType = "";
 		 
+		
 
 		public void ShowMenu()
 		{
+			Account account = new Account(cusFullname, cusAccountNo, cusAccountType, 0);
+			if (!accounts.Contains(account))
+			{
+				accounts.Add(account);
+			}
 
-			
-			Console.WriteLine($"---{(string)firstAccountCreated[0]}'s--DASHBOARD------\n");
-			Console.WriteLine($"Welcome, dear {(string)firstAccountCreated[0]}.\nWhat would you like to do today ?");
+
+			Console.WriteLine($"---{accounts[0].Fullname}'s--DASHBOARD------\n");
+			Console.WriteLine($"Welcome, dear {accounts[0].Fullname}.\nWhat would you like to do today ?");
 			Console.WriteLine(">Press 1 Create Account");
 			Console.WriteLine(">Press 2 to Deposit");
 			Console.WriteLine(">Press 3 to Withdraw");
@@ -29,100 +38,154 @@ namespace Bank_app
 			Console.WriteLine("Press 6 to get your Statement");
 			Console.WriteLine("Press 7 to Logout\n\n");
 			Console.Write("Select an option: ");
+
+			string mychoice;
+			bool isValidChoice = false;
+
 			do
 			{
-				string choice = Console.ReadLine();
-				if (choice == "1") { Create2ndAccount(); }
-				else if (choice == "2") { Deposit(); }
-				else if (choice == "3") { Withdraw(); }
-				else if (choice == "4") { Transfer(); }
-				else if (choice == "5") { GetBalance(); }
-				else if (choice == "6") { GetStatement(); }
-				else if (choice == "5") { LogOut(); }
-				if (int.Parse(choice) > 7 || int.Parse(choice) < 1)
+				mychoice = Console.ReadLine();
+
+				if (mychoice == "1")
 				{
-					Console.WriteLine("Oops, the selected Number is out of range.");
+					Create2ndAccount();
+					isValidChoice = true;
+				}
+				else if (mychoice != "2")
+				{
+					Console.WriteLine("Oops, the selected number is out of range.");
 					ShowMenu();
 				}
-			} while (!int.TryParse(choice, out _) || int.Parse(choice) > 7 || int.Parse(choice) < 1);
+				else
+				{
+					isValidChoice = true;
+				}
 
+			} while (!isValidChoice);
 		}
+
 		private void Create2ndAccount()
 		{
 			Console.Clear();
-			string accNo = "";
-			decimal accBal = 0;
-			string accType = "";
+			
+			selectAccType();
+			GenerateAnotherAccountNo();
+			SaveCreatedAccDetails();
+			PromptToViewAccount();
+			ShowAllAccount();
+
+
 
 
 			void selectAccType()
-			{
-			
+			{			
 				Console.WriteLine(" Please Enter your desired account type\n");
 				Console.WriteLine(">  Press 1 for savings account\n>  Press 2 for current account  ");
 				string input = Console.ReadLine();
+				bool isValid;
 				do {
 					if (input == "1")
 					{
-						accType += "savings";
+						isValid = true;
+						accType = "savings";
 						Console.WriteLine("You need to deposit at least 1000 naira to open such an account");
 						Console.Write("Please enter an amount greater or equal to 1000 naira: ");
+						
 						string enteredAmount = Console.ReadLine();
-						if (enteredAmount == "1000" || int.Parse(enteredAmount) >= 1000)
+						do
 						{
-							decimal cleanAmount = decimal.Parse(enteredAmount);
-							accBal += cleanAmount;
-							Console.WriteLine($"You have successfully added {cleanAmount}");
-						}
-						else
-						{
-							Console.WriteLine($"Invalid amount!. You need to enter an amount greater then 1000 naira. ");
-							Console.WriteLine($"Processed Restarted !");
-							selectAccType();
-						}
+							if (enteredAmount == "1000" || int.Parse(enteredAmount) >= 1000)
+							{
+								decimal cleanAmount = decimal.Parse(enteredAmount);
+								accBal = cleanAmount;
+								Console.WriteLine($"You have successfully added {cleanAmount} naira");
+							}
+							else 
+							{
+								Console.WriteLine($"Invalid amount!. You need to enter an amount greater then 1000 naira. ");
+								Console.WriteLine($"Processed Restarted !");
+								selectAccType();
+							}
+						} while (!int.TryParse(enteredAmount, out _) || int.Parse(enteredAmount) < 1000 );
 
 					}
 					else if (input == "2")
 					{
+						isValid = true;
 						accType = "current";
 					}
 					else
 					{
+						isValid = false;
 						Console.Clear();
 						Console.WriteLine("You have entered an incorrect command. Please Retry");
 						Create2ndAccount();
 					}
-				}while (!int.TryParse(input,out _) ||  int.Parse(input) != 2 || int.Parse(input) != 1);
+				}while (isValid );
 			}
+
+
+
 
 			void GenerateAnotherAccountNo()
 			{
 			Random random = new Random();
 			var i = random.Next(1000000000, 2099999999); //tells the range of random numbers you want to generate.
-			accNo += i.ToString();
-			Console.WriteLine($"An account Number has been generated for you!>>{accNo}");
+			accNo = i.ToString();
+			Console.WriteLine($"Here is your generated Account Number!>> {accNo}");
 			}
 
 
-			void SaveCreatedAcc()
+			void SaveCreatedAccDetails()
 			{
-			ArrayList newAccount = new ArrayList() { cusFullname, accType, accNo,accBal };
-			firstAccountCreated.Add(newAccount);
+				Account AnotherAccount = new Account(cusFullname, accNo, accType, accBal);
+				if (!accounts.Contains(AnotherAccount))
+				{
+					accounts.Add(AnotherAccount);
+				} 
 			}
-			
-			 
-			 
-		}
 
 		
+			void ShowAllAccount()
+			{
+				string allprints = "";
+				foreach (Account acc in accounts)
+				{
+					allprints += $"{acc.Fullname}  {acc.AccountNumber}  {acc.AccountType}   {acc.Balance}\n";			
+				}
+				Console.Write(allprints);
+			}
 
-		
 
-
-
-
-
-		
+			void PromptToViewAccount()
+			{
+				string choice;
+				bool isValid;
+				do
+				{
+					Console.WriteLine("Do you want to View all your accounts ?  Y/N");
+					choice = Console.ReadLine();
+					if (choice == "Y" || choice == "y")
+					{
+						isValid = true;
+						ShowAllAccount();
+					}
+					else if (choice == "N" || choice == "n")
+					{
+						isValid = true;
+						Console.WriteLine("You have been redirected to your Dashboard.\n");
+						ShowMenu();
+					}
+					else
+					{
+						isValid = false;
+						Console.WriteLine(" Invalid input! ");
+						Console.WriteLine("Please choose either 'Y' or 'N' when prompted again ?");
+						PromptToViewAccount();
+					}
+				} while (isValid);
+			}
+		}				
 	}
 }
 

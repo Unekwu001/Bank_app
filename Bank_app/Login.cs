@@ -14,8 +14,6 @@ namespace Bank_app
 		public string myemail { get; set; }
 		public string mypassword { get; set; }
 
-		public ArrayList credentials = new ArrayList() { cusFullname, cusAccountType, cusAccountNo, cusEmail, cusPassword };
-
 		public Login()
 		{
 			myemail = myemail;
@@ -73,7 +71,7 @@ namespace Bank_app
 					}
 					else if (press == "n" || press == "N")
 					{
-						Controller();
+						Program.Controller();
 					}
 					else { Console.WriteLine("Please give it Another Try Champ!"); }
 				} while (int.TryParse(press, out _) || press != "Y" || press != "y");
