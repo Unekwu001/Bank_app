@@ -24,7 +24,8 @@ namespace Bank_app
 		public static string cusPassword = "";
 		public static string cusAccountNo = "";
 		public static string cusAccountType = "";
-		 	 
+		private decimal accBal = 0;
+
 
 		internal void Registration() //Registration method 
 		{
@@ -90,7 +91,7 @@ namespace Bank_app
 			if (input == "1")
 			{
 				cusAccountType = "savings";
-				decimal accBal = 0;
+				
 				bool isValid ;
 
 				Console.WriteLine("You need to deposit at least 1000 naira to open such an account");
@@ -106,13 +107,23 @@ namespace Bank_app
 						decimal cleanAmount = decimal.Parse(enteredAmount);
 						accBal += cleanAmount;
 						Account account = new Account(cusFullname, cusAccountNo, cusAccountType, accBal);
-						Console.WriteLine($"You have successfully added {cleanAmount} naira to your new account >> {cusAccountNo} ");
+
+						if (!DashBoard.accounts.Contains(account))
+						{
+							DashBoard.accounts.Add(account);
+							Console.WriteLine($"You have successfully added {cleanAmount} naira to your new account >> {cusAccountNo} ");
+						}
+						else
+						{
+							Console.WriteLine("This account already exists.\nHope you are not a robot ?\n\nYou have 3 trials left.\n");
+							AccountType();
+						}
 					}
 					else
 					{
-						isValid = false;
+						isValid = true;
 						Console.WriteLine($"Invalid amount!. You need to enter an amount greater then 1000 naira. ");
-						Console.WriteLine($"Processed Restarted !");
+						Console.WriteLine($"Process Restarted !");
 						AccountType();
 					}
 				} while (isValid == false);
@@ -120,6 +131,17 @@ namespace Bank_app
 			else if (input == "2")
 			{
 				cusAccountType = "current";
+				Account account = new Account(cusFullname, cusAccountNo, cusAccountType, accBal);
+
+				if (!DashBoard.accounts.Contains(account))
+				{
+					DashBoard.accounts.Add(account);
+				}
+				else
+				{
+					Console.WriteLine("This account already exists.\nHope you are not a robot ?\n\nYou have 3 trials left.\n");
+					AccountType();
+				}
 			}
 			else
 			{

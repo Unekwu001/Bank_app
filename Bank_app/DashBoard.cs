@@ -11,7 +11,7 @@ namespace Bank_app
 {
 	internal class DashBoard : Login
 	{
-		static List<Account> accounts = new List<Account>();
+		public static List<Account> accounts = new List<Account>();
 
 		public string accNo = "";
 		public decimal accBal = 0;
@@ -21,13 +21,6 @@ namespace Bank_app
 
 		public void ShowMenu()
 		{
-			Account account = new Account(cusFullname, cusAccountNo, cusAccountType, 0);
-			if (!accounts.Contains(account))
-			{
-				accounts.Add(account);
-			}
-
-
 			Console.WriteLine($"---{accounts[0].Fullname}'s--DASHBOARD------\n");
 			Console.WriteLine($"Welcome, dear {accounts[0].Fullname}.\nWhat would you like to do today ?");
 			Console.WriteLine(">Press 1 Create Account");
