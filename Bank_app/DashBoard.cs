@@ -1,4 +1,5 @@
 ﻿using System;
+using ConsoleTables;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +13,7 @@ namespace Bank_app
 	internal class DashBoard : Login
 	{
 		public static List<Account> accounts = new List<Account>();
-
+	
 		public string accNo = "";
 		public decimal accBal = 0;
 		public string accType = "";
@@ -65,7 +66,7 @@ namespace Bank_app
 			GenerateAnotherAccountNo();
 			SaveCreatedAccDetails();
 			PromptToViewAccount();
-			ShowAllAccount();
+			
 
 
 
@@ -75,46 +76,44 @@ namespace Bank_app
 				Console.WriteLine(" Please Enter your desired account type\n");
 				Console.WriteLine(">  Press 1 for savings account\n>  Press 2 for current account  ");
 				string input = Console.ReadLine();
-				bool isValid;
-				do {
-					if (input == "1")
-					{
-						isValid = true;
-						accType = "savings";
-						Console.WriteLine("You need to deposit at least 1000 naira to open such an account");
-						Console.Write("Please enter an amount greater or equal to 1000 naira: ");
-						
-						string enteredAmount = Console.ReadLine();
-						do
-						{
-							if (enteredAmount == "1000" || int.Parse(enteredAmount) >= 1000)
-							{
-								decimal cleanAmount = decimal.Parse(enteredAmount);
-								accBal = cleanAmount;
-								Console.WriteLine($"You have successfully added {cleanAmount} naira");
-							}
-							else 
-							{
-								Console.WriteLine($"Invalid amount!. You need to enter an amount greater then 1000 naira. ");
-								Console.WriteLine($"Processed Restarted !");
-								selectAccType();
-							}
-						} while (!int.TryParse(enteredAmount, out _) || int.Parse(enteredAmount) < 1000 );
 
-					}
-					else if (input == "2")
+
+				if (input == "" || input is null || !int.TryParse(input, out _))
+				{
+					Console.Clear();
+					Console.WriteLine("You have entered an incorrect command. Please Retry");
+					selectAccType();
+				}
+				else if (input == "1")
+				{
+					accType = "savings";
+					Console.WriteLine("You need to deposit at least 1000 naira to open such an account");
+					Console.Write("Please enter an amount greater or equal to 1000 naira: ");
+
+					string enteredAmount;
+					enteredAmount = Console.ReadLine();
+							
+					if(enteredAmount is null || enteredAmount == " " || !int.TryParse(enteredAmount,out _) || int.Parse(enteredAmount) < 1000)  
 					{
-						isValid = true;
-						accType = "current";
-					}
-					else
+						Console.WriteLine($"Invalid amount!. You need to enter an amount greater then 1000 naira. ");
+						Console.WriteLine($"Process Restarted !");
+						selectAccType();
+					}							
+					else if (int.Parse(enteredAmount) > 999)
 					{
-						isValid = false;
-						Console.Clear();
-						Console.WriteLine("You have entered an incorrect command. Please Retry");
-						Create2ndAccount();
+						decimal cleanAmount = decimal.Parse(enteredAmount);
+						accBal = cleanAmount;
+						Console.WriteLine($"You have successfully added {cleanAmount} naira");
 					}
-				}while (isValid );
+				}
+				else if (input == "2")
+				{
+					accType = "current";
+					accBal = 0;
+					Console.WriteLine($"You have successfully created a new account.\nYour account numbre is >> {accNo}\n ");
+					
+				}
+				
 			}
 
 
@@ -135,19 +134,10 @@ namespace Bank_app
 				if (!accounts.Contains(AnotherAccount))
 				{
 					accounts.Add(AnotherAccount);
+					Console.WriteLine("Your details have Successfully created!");
 				} 
 			}
 
-		
-			void ShowAllAccount()
-			{
-				string allprints = "";
-				foreach (Account acc in accounts)
-				{
-					allprints += $"{acc.Fullname}  {acc.AccountNumber}  {acc.AccountType}   {acc.Balance}\n";			
-				}
-				Console.Write(allprints);
-			}
 
 
 			void PromptToViewAccount()
@@ -174,10 +164,29 @@ namespace Bank_app
 						isValid = false;
 						Console.WriteLine(" Invalid input! ");
 						Console.WriteLine("Please choose either 'Y' or 'N' when prompted again ?");
-						PromptToViewAccount();
 					}
 				} while (isValid);
+
 			}
+
+
+
+
+
+			
+		}
+		void ShowAllAccount()
+		{
+			string allprints = "";
+			foreach (Account acc in accounts)
+			{
+				allprints += $"|     {acc.Fullname,-15}|   {acc.AccountNumber,-15}|     {acc.AccountType,-15}|      {acc.Balance,-16}|\n";			
+			}
+			Console.WriteLine("|--------------------|------------------|--------------------|----------------------|");
+			Console.WriteLine("|     FULLNAME       |  ACCOUNT NUMBER  |   ACCOUNT TYPE     |   ACCOUNT BALANCE    |");
+			Console.WriteLine("|--------------------|------------------|--------------------|----------------------|");
+			Console.WriteLine(allprints);
+			Console.WriteLine("------------------------------------------------------------------------------------");
 		}				
 	}
 }

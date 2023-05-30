@@ -18,14 +18,13 @@ namespace Bank_app
 		public readonly string passwordPattern = @"^(?=.*[a-zA-Z0-9])(?=.*[@#$%^&+=])(?=.{6,})";
 		public readonly string emailPattern = @"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$";
 		public readonly string namePattern = @"^[A-Z][a-zA-Z]*\s[A-Z][a-zA-Z]*$";
-		string pick;
 		public static string cusFullname = "";
 		public static string cusEmail = "";
 		public static string cusPassword = "";
 		public static string cusAccountNo = "";
 		public static string cusAccountType = "";
 		private decimal accBal = 0;
-
+		private bool isValido;
 
 		internal void Registration() //Registration method 
 		{
@@ -66,11 +65,12 @@ namespace Bank_app
 		//Printing of the all registered Customers
 		internal void ShowMyRegistration()
 		{
-				Console.WriteLine($"Name:    {cusFullname} ");
-				Console.WriteLine($"Account Type:   {cusAccountType}");
-				Console.WriteLine($"Account Number:   {cusAccountNo}");
-				Console.WriteLine($"Email:    {cusEmail}");
-				Console.WriteLine($"Password: Your password and other details has been sent to your email.\n\n");		
+			Console.WriteLine($"\nName: {cusFullname} ");
+			Console.WriteLine($"Account Type: {cusAccountType}");
+			Console.WriteLine($"Account Number: {cusAccountNo}");
+			Console.WriteLine($"Email: {cusEmail}");
+			Console.WriteLine($"AccountBalance:************* >> Check your mail");
+			Console.WriteLine($"Password: ************ Check your mail.\n\n");		
 		}
 
 		//---------------------------------------------------------------------------------------------------------------------------
@@ -84,26 +84,34 @@ namespace Bank_app
 
 		public void AccountType()
 		{
+			
 			Console.WriteLine(" Please Enter your desired account type\n");
 			Console.WriteLine(">  Press 1 for savings account\n>  Press 2 for current account  ");
 			string input = Console.ReadLine();
-
+			string enteredAmount;
+			
 			if (input == "1")
 			{
+
 				cusAccountType = "savings";
-				
-				bool isValid ;
 
 				Console.WriteLine("You need to deposit at least 1000 naira to open such an account");
 				Console.Write("Please enter an amount greater or equal to 1000 naira: ");
+				enteredAmount = Console.ReadLine();
 
-				string enteredAmount = Console.ReadLine();
 				do
 				{
-					
-					if (enteredAmount == "1000" || int.Parse(enteredAmount) >= 1000)
+					if (enteredAmount is null || enteredAmount == " " || !int.TryParse(enteredAmount, out _) || int.Parse(enteredAmount) < 1000)
 					{
-						isValid= true;
+						isValido = false;
+						Console.WriteLine($"Invalid amount!. You need to enter an amount greater then 1000 naira. ");
+						Console.WriteLine($"Process Restarted !");
+						AccountType();
+					}
+
+					else if (int.Parse(enteredAmount) >= 1000)
+					{
+						isValido = true;
 						decimal cleanAmount = decimal.Parse(enteredAmount);
 						accBal += cleanAmount;
 						Account account = new Account(cusFullname, cusAccountNo, cusAccountType, accBal);
@@ -119,14 +127,7 @@ namespace Bank_app
 							AccountType();
 						}
 					}
-					else
-					{
-						isValid = true;
-						Console.WriteLine($"Invalid amount!. You need to enter an amount greater then 1000 naira. ");
-						Console.WriteLine($"Process Restarted !");
-						AccountType();
-					}
-				} while (isValid == false);
+				} while (isValido == false);
 			}
 			else if (input == "2")
 			{
