@@ -13,6 +13,7 @@ namespace Bank_app
 	internal class DashBoard : Login
 	{
 		public static List<Account> accounts = new List<Account>();
+
 	
 		public string accNo = "";
 		public decimal accBal = 0;
@@ -45,14 +46,15 @@ namespace Bank_app
 					Create2ndAccount();
 					isValidChoice = true;
 				}
-				else if (mychoice != "2")
+				else if (mychoice == "2")
 				{
-					Console.WriteLine("Oops, the selected number is out of range.");
-					ShowMenu();
+					var depo = new Transactions();
+					depo.Deposit();
 				}
-				else
+				else if (mychoice == "3")
 				{
-					isValidChoice = true;
+					var wd = new Transactions();
+					wd.Withdraw();
 				}
 
 			} while (!isValidChoice);
@@ -110,7 +112,7 @@ namespace Bank_app
 				{
 					accType = "current";
 					accBal = 0;
-					Console.WriteLine($"You have successfully created a new account.\nYour account numbre is >> {accNo}\n ");
+					Console.WriteLine($"You have successfully created a new account.\nYour account number is >> {accNo}\n ");
 					
 				}
 				
@@ -135,47 +137,45 @@ namespace Bank_app
 				{
 					accounts.Add(AnotherAccount);
 					Console.WriteLine("Your details have Successfully created!");
-				} 
+				}
 			}
-
-
-
-			void PromptToViewAccount()
-			{
-				string choice;
-				bool isValid;
-				do
-				{
-					Console.WriteLine("Do you want to View all your accounts ?  Y/N");
-					choice = Console.ReadLine();
-					if (choice == "Y" || choice == "y")
-					{
-						isValid = true;
-						ShowAllAccount();
-					}
-					else if (choice == "N" || choice == "n")
-					{
-						isValid = true;
-						Console.WriteLine("You have been redirected to your Dashboard.\n");
-						ShowMenu();
-					}
-					else
-					{
-						isValid = false;
-						Console.WriteLine(" Invalid input! ");
-						Console.WriteLine("Please choose either 'Y' or 'N' when prompted again ?");
-					}
-				} while (isValid);
-
-			}
-
-
-
-
-
 			
 		}
-		void ShowAllAccount()
+
+		public void PromptToViewAccount()
+		{
+			string choice;
+			bool isValid;
+			do
+			{
+				Console.WriteLine("Do you want to View all your accounts ?  Y/N");
+				choice = Console.ReadLine();
+				if (choice == "Y" || choice == "y")
+				{
+					isValid = true;
+					ShowAllAccount();
+				}
+				else if (choice == "N" || choice == "n")
+				{
+					isValid = true;
+					Console.WriteLine("You have been redirected to your Dashboard.\n");
+					ShowMenu();
+				}
+				else
+				{
+					isValid = false;
+					Console.WriteLine(" Invalid input! ");
+					Console.WriteLine("Please choose either 'Y' or 'N' when prompted again ?");
+				}
+			} while (isValid);
+
+		}
+
+
+
+
+
+		public void ShowAllAccount()
 		{
 			string allprints = "";
 			foreach (Account acc in accounts)

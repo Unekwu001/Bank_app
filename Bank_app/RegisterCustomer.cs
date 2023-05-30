@@ -84,7 +84,7 @@ namespace Bank_app
 
 		public void AccountType()
 		{
-			
+			var dash = new DashBoard();
 			Console.WriteLine(" Please Enter your desired account type\n");
 			Console.WriteLine(">  Press 1 for savings account\n>  Press 2 for current account  ");
 			string input = Console.ReadLine();
@@ -116,9 +116,9 @@ namespace Bank_app
 						accBal += cleanAmount;
 						Account account = new Account(cusFullname, cusAccountNo, cusAccountType, accBal);
 
-						if (!DashBoard.accounts.Contains(account))
+						if (!dash.accounts.Contains(account))
 						{
-							DashBoard.accounts.Add(account);
+							dash.accounts.Add(account);
 							Console.WriteLine($"You have successfully added {cleanAmount} naira to your new account >> {cusAccountNo} ");
 						}
 						else
@@ -134,9 +134,9 @@ namespace Bank_app
 				cusAccountType = "current";
 				Account account = new Account(cusFullname, cusAccountNo, cusAccountType, accBal);
 
-				if (!DashBoard.accounts.Contains(account))
+				if (!dash.accounts.Contains(account))
 				{
-					DashBoard.accounts.Add(account);
+					dash.accounts.Add(account);
 				}
 				else
 				{
