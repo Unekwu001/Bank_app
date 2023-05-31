@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Bank_app
 {
-	internal class RegisterCustomer
+	internal class Register
 	{
 		// Fields
 		public readonly string passwordPattern = @"^(?=.*[a-zA-Z0-9])(?=.*[@#$%^&+=])(?=.{6,})";
@@ -116,9 +116,9 @@ namespace Bank_app
 						accBal += cleanAmount;
 						Account account = new Account(cusFullname, cusAccountNo, cusAccountType, accBal);
 
-						if (!dash.accounts.Contains(account))
+						if (!DashBoard.accounts.Contains(account))
 						{
-							dash.accounts.Add(account);
+							DashBoard.accounts.Add(account);
 							Console.WriteLine($"You have successfully added {cleanAmount} naira to your new account >> {cusAccountNo} ");
 						}
 						else
@@ -134,9 +134,9 @@ namespace Bank_app
 				cusAccountType = "current";
 				Account account = new Account(cusFullname, cusAccountNo, cusAccountType, accBal);
 
-				if (!dash.accounts.Contains(account))
+				if (!DashBoard.accounts.Contains(account))
 				{
-					dash.accounts.Add(account);
+					DashBoard.accounts.Add(account);
 				}
 				else
 				{

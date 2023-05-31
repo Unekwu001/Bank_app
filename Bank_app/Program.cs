@@ -41,7 +41,7 @@ namespace Bank_app
 				
 				if (choice == "1")
 				{
-					var customa = new RegisterCustomer();
+					var customa = new Register();
 					customa.Registration();
 					
 				}

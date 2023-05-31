@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Bank_app
 {
-	internal class Login:RegisterCustomer
+	internal class Login:Register
 	{
 		public string myemail { get; set; }
 		public string mypassword { get; set; }

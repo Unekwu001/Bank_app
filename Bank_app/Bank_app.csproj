@@ -47,7 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Accounts.cs" />
-    <Compile Include="RegisterCustomer.cs" />
+    <Compile Include="Register.cs" />
     <Compile Include="Login.cs" />
     <Compile Include="DashBoard.cs" />
     <Compile Include="Program.cs" />
