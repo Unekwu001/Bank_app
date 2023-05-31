@@ -28,6 +28,8 @@ namespace Bank_app
 		decimal CleanAmountToTransfer;
 
 
+
+
 		public void Deposit()
 		{
 			var dash = new DashBoard();
@@ -55,6 +57,7 @@ namespace Bank_app
 				}
 			}
 		}
+
 
 
 
@@ -110,17 +113,26 @@ namespace Bank_app
 
 
 
+
 		public void Transfer()
 		{
-			Console.Write("----------Transfers-----------");
-			Console.Write("Enter the account number TRANSFER FROM:>> ");
-			AccountToTransferFrom = Console.ReadLine();
 
-			Console.Write("Enter the account you want to TRANSFER TO:>> ");
-			AccountToTransferTo = Console.ReadLine();
+			var dash = new DashBoard();
+			dash.ShowAllAccount();
+			Console.WriteLine("----------Transfers-----------");
 
-			Console.WriteLine("Enter the amount you want to transfer:>> ");
-			CleanAmountToTransfer = int.Parse(AmountToWithdraw);
+			do
+			{
+				Console.Write("Enter the account number TRANSFER FROM:>> ");
+				AccountToTransferFrom = Console.ReadLine();
+
+				Console.Write("Enter the account you want to TRANSFER TO:>> ");
+				AccountToTransferTo = Console.ReadLine();
+
+				Console.WriteLine("Enter the amount you want to transfer:>> ");
+				CleanAmountToTransfer = int.Parse(AmountToWithdraw);
+
+			} while (!int.TryParse(AccountToTransferFrom,out _));
 
 			foreach (Account acc in DashBoard.accounts)
 			{
@@ -144,13 +156,14 @@ namespace Bank_app
 						acc.Balance += CleanAmountToTransfer;
 					}
 
-					var dash = new DashBoard();
-					dash.PromptToViewAccount();
+					var das = new DashBoard();
+					das.PromptToViewAccount();
 				}
 
 				else
 				{
-					Console.WriteLine($"Error in Transaction!");
+					Console.Clear();
+					Console.WriteLine($"\n\nError in Transaction!");
 					Transfer();
 				}
 			}

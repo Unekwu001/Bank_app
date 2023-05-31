@@ -56,6 +56,11 @@ namespace Bank_app
 					var wd = new Transactions();
 					wd.Withdraw();
 				}
+				else if (mychoice == "4")
+				{
+					var tr = new Transactions();
+					tr.Transfer();
+				}
 
 			} while (!isValidChoice);
 		}
