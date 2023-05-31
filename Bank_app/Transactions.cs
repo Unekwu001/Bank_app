@@ -28,6 +28,8 @@ namespace Bank_app
 		decimal CleanAmountToTransfer;
 
 
+
+
 		public void Deposit()
 		{
 			var dash = new DashBoard();
@@ -55,6 +57,7 @@ namespace Bank_app
 				}
 			}
 		}
+
 
 
 
@@ -110,9 +113,12 @@ namespace Bank_app
 
 
 
+
 		public void Transfer()
 		{
-			Console.Write("----------Transfers-----------");
+			var dash = new DashBoard();
+			dash.ShowAllAccount();
+			Console.WriteLine("----------Transfers-----------");
 			Console.Write("Enter the account number TRANSFER FROM:>> ");
 			AccountToTransferFrom = Console.ReadLine();
 
@@ -144,13 +150,14 @@ namespace Bank_app
 						acc.Balance += CleanAmountToTransfer;
 					}
 
-					var dash = new DashBoard();
-					dash.PromptToViewAccount();
+					var das = new DashBoard();
+					das.PromptToViewAccount();
 				}
 
 				else
 				{
-					Console.WriteLine($"Error in Transaction!");
+					Console.Clear();
+					Console.WriteLine($"\n\nError in Transaction!");
 					Transfer();
 				}
 			}
