@@ -116,9 +116,22 @@ namespace Bank_app
 
 		public void Transfer()
 		{
+<<<<<<< HEAD
 
 			var dash = new DashBoard();
 			dash.ShowAllAccount();
+=======
+ 
+			var dash = new DashBoard();
+			dash.ShowAllAccount();
+			Console.WriteLine("----------Transfers-----------");
+			Console.Write("Enter the account number TRANSFER FROM:>> ");
+			AccountToTransferFrom = Console.ReadLine();
+ 
+
+			var dsh = new DashBoard();
+			dsh.ShowAllAccount();
+>>>>>>> 73abdabac2b9ea7ebe90e04ddd175a0ada97f50a
 			Console.WriteLine("----------Transfers-----------");
 
 			do
